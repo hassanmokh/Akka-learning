@@ -13,9 +13,12 @@ public class SensorActor extends AbstractLoggingActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(Message.class, msg-> getContext()
+                .match(Message.class, msg-> {
+                        log().info("Add a new sensor data {}", msg.getKey());
+                        getContext()
                         .actorOf(StoreActor.props())
-                        .tell(msg, getSelf())
+                        .tell(msg, getSelf());
+                }
                 )
                 .matchAny((Object o) -> {})
                 .build();

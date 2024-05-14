@@ -2,6 +2,7 @@ package com.madfoat;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.routing.FromConfig;
 import com.madfoat.actors.SensorActor;
 import com.madfoat.messages.Message;
 import com.madfoat.messages.TypeMessage;
@@ -19,11 +20,11 @@ public class Main {
 
         ActorSystem system = ActorSystem.create("DDs-Task");
 
-        ActorRef sensorActor = system.actorOf(SensorActor.props(), "sensor01");
+        ActorRef sensorActor = system.actorOf(SensorActor.props().withRouter(FromConfig.getInstance()), "sensorActor");
 
         Random random = new Random();
 
-        for(int idx = 0; idx < 100; idx++){
+        for(int idx = 0; idx < 800; idx++){
             Integer rand = random.nextInt(10000);
 
             if(rand < 2000)
@@ -45,7 +46,6 @@ public class Main {
             else if(rand > 9999)
                 clear(sensorActor);
 
-            Thread.sleep(2000);
         }
 
     }
